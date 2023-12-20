@@ -14,14 +14,22 @@ import java.time.Duration;
 
 public class FlinkConsumer {
     static Logger logger = LoggerFactory.getLogger(FlinkConsumer.class);
-     String TOPIC_IN = "adapt-inbound";
-     String BOOTSTRAP_SERVER = "adapt-server:9092,adapt-server:9093,adapt-server:9094";
+     String TOPIC_IN;
+     String BOOTSTRAP_SERVER;
+     String GROUP_NAME;
+
+    public FlinkConsumer(String TOPIC_IN, String BOOTSTRAP_SERVER,String GROUP_NAME) {
+        this.TOPIC_IN = TOPIC_IN;
+        this.BOOTSTRAP_SERVER = BOOTSTRAP_SERVER;
+        this.GROUP_NAME = GROUP_NAME;
+    }
+
     public void start(StreamExecutionEnvironment env) throws Exception {
         env.enableCheckpointing(100, CheckpointingMode.AT_LEAST_ONCE);
         KafkaSource<String> source =   KafkaSource.<String>builder()
-                .setBootstrapServers("adapt-server:9092,adapt-server:9093,adapt-server:9094")
-                .setTopics("adapt-inbound")
-                .setGroupId("adapt-group")
+                .setBootstrapServers(this.BOOTSTRAP_SERVER)
+                .setTopics(TOPIC_IN)
+                .setGroupId(GROUP_NAME)
                 .setProperty("enable.auto.commit", "false")
                 .setProperty("commit.offsets.on.checkpoint", "true")
                 .setStartingOffsets(OffsetsInitializer.earliest())

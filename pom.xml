@@ -147,7 +147,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>flink-kafka-datastream-${project.version}</finalName>
+                            <finalName>flink-kafka-consumer-1.0</finalName>
                             <artifactSet>
                                 <includes>
                                     <include>**</include>
